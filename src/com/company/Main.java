@@ -26,11 +26,15 @@ public class Main
     static int permission=0;
     private JPanel         panelMain;
     static private JFrame frameLogowanie;
+    static private JFrame frameK;
     private JButton        zalogujSieButton;
     private JPasswordField passwordField1;
 
     static private JPanel panelP;
+    static private JPanel panelK;
+    static private JPanel panelKa;
     static private JFrame frameP;
+    static private JFrame frameKa;
 
     static DbxClientV2 client;
 
@@ -68,10 +72,12 @@ public class Main
                 else if(inputLine.startsWith("ki"))
                 {
                     permission=2;
+                    frameK.setVisible(true);
                 }
                 else if(inputLine.startsWith("ka"))
                 {
                     permission=3;
+                    frameKa.setVisible(true);
                 }
                 System.out.println ( "Twoj poziom uprawnien to: " + permission );
                 frameLogowanie.setVisible(false);
@@ -94,6 +100,8 @@ public class Main
     static void displayGUIComponents()
     {
         panelP = new Form1().getPanel();
+        panelK = new Form2().getPanel();
+        panelKa = new Form3().getPanel();
 
         frameLogowanie = new JFrame("Zarzadzanie Dokumentami");
         frameLogowanie.setContentPane ( new Main().panelMain );
@@ -105,17 +113,30 @@ public class Main
         frameP.setContentPane ( panelP );
         frameP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameP.pack();
+
+        frameK = new JFrame("Zarzadzanie Dokumentami - Kierownik");
+        frameK.setContentPane ( panelK );
+        frameK.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameK.pack();
+
+        frameKa = new JFrame("Zarzadzanie Dokumentami - Kadry");
+        frameKa.setContentPane ( panelKa );
+        frameKa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameKa.pack();
+
         centreWindow ( frameLogowanie );
         centreWindow ( frameP );
+        centreWindow ( frameK );
+        centreWindow ( frameKa );
     }
 
     static void setUpDropboxConnection()
     {
-        final String ACCESS_TOKEN = "sl.BApnhhFVEuNPPdmMs3O9zr354GYGb2nj3wimO7CxoHvHb2yB6cdBpp5TcXB_LXATytTsmeGg4sYbhsSaAEehGP4sKH8y-yMI-WsLUtPMMT28QlzhB1yKIhxhm_VRCchVgR_YI-Y";
+        final String ACCESS_TOKEN = "obsUvJMAmrIAAAAAAAAAAaG5pNRcyh36yQNA8kOOQCpamhMX3TcDwjKVg3tFrm_E";
         DbxRequestConfig config = DbxRequestConfig.newBuilder("zarzadzanieDokumentami/0.1").build();
         client  = new DbxClientV2(config, ACCESS_TOKEN);
-        //FullAccount account = client.users().getCurrentAccount(); // sprawdzanie do jakiego konta dropbox jest przypisany token
-        //System.out.println(account.getName().getDisplayName()); // sprawdzanie do jakiego konta dropbox jest przypisany token
+        //FullAccount account = client.users().getCurrentAccount(); // sprawdzanie do jakiego konta jest przypisany token
+        //System.out.println(account.getName().getDisplayName()); // sprawdzanie do jakiego konta jest przypisany token
     }
 
     static void uploadFile(File pathSource, String pathDestination)
@@ -124,6 +145,7 @@ public class Main
             InputStream in = new FileInputStream (pathSource);
             client.files().uploadBuilder(pathDestination).uploadAndFinish(in);
             System.out.println ( "file uploaded successfully" );
+            infoBox ( "Wysyłanie zakończone powodzeniem!", "Sukces!" );
         }
         catch ( IOException | DbxException e )
         {
@@ -160,7 +182,9 @@ public class Main
 
     static void deleteFile(String pathDeleteDestination) throws DbxException
     {
-        DeleteResult metadata = client.files().deleteV2(pathDeleteDestination);
+            DeleteResult metadata = client.files().deleteV2(pathDeleteDestination);
+            System.out.println ( pathDeleteDestination );
+            infoBox ( "Usuwanie zakończone powodzeniem!", "Sukces!" );
     }
 
     static void chooseFile()
@@ -237,12 +261,16 @@ public class Main
             }
         }
 
-    public static void main(String[] args) throws Exception
+
+            static void moveFile(String sourcePath, String destinationPath) throws DbxException
+            {
+                RelocationResult metadata = client.files().moveV2(sourcePath, destinationPath);
+            }
+
+    public static void main(String[] args)
     {
         System.out.println ( "Twoj poziom uprawnien to: " + permission );
         displayGUIComponents();
         setUpDropboxConnection();
-        //uploadFile ("C:/Users/kowal/Desktop/testerjavaIP/pliktestowy.txt","/pliczektestowy31.txt");
-        //deleteFile ("/pliczektestowy1.txt");
     }
 }

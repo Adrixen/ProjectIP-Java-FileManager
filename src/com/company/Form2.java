@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public
-class Form1
+class Form2
 {
-    private JPanel  panelPracownik;
+    private JPanel  panelKierownik;
     private JButton chooserButton;
     private JButton wyslijPlikButton;
     private JTextField textField1;
@@ -19,16 +19,17 @@ class Form1
     private JTextArea textArea1;
     private JButton    pobierzWybranyPlikButton;
     private JTextField nazwaPlikuDoPobraniaTextField;
-    private JButton    usunPlikButton;
+    private JButton usunPlikButton;
+    private JButton cofnijPlikDoPoprawyButton;
 
     public
-    Form1 ( )
+    Form2 ( )
     {
         chooserButton.addActionListener ( e -> Main.chooseFile () );
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/pracownik/pracownik_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kierownik/kierownik_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -38,17 +39,7 @@ class Form1
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                try
-                {
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
-                //Main.uploadFile ( Main.pathPliku , "/kierownik/pracownik_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kadry/kierownik_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -58,7 +49,7 @@ class Form1
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/pracownik/" );
+                Main.listFiles ( "/kierownik/" );
                 textArea1.setText(Main.listaPlikowP);
             }
             catch ( DbxException dbxException )
@@ -75,7 +66,6 @@ class Form1
                 Main.saveFile ();
                 String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
                 Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
-                //Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + textField1.getText ( ) + ".txt" ) );
             }
         } );
         usunPlikButton.addActionListener ( new ActionListener ( )
@@ -94,9 +84,27 @@ class Form1
                 }
             }
         } );
+        cofnijPlikDoPoprawyButton.addActionListener ( new ActionListener ( )
+        {
+            @Override
+            public
+            void actionPerformed ( ActionEvent e )
+            {
+                try
+                {
+                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                }
+                catch ( DbxException dbxException )
+                {
+                    dbxException.printStackTrace ( );
+                }
+            }
+        } );
     }
 
     public JPanel getPanel() {
-        return panelPracownik;
+        return panelKierownik;
     }
 }
