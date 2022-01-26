@@ -2,8 +2,6 @@ package com.company;
 
 import com.dropbox.core.DbxException;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 public
@@ -57,7 +55,7 @@ class Form1
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFilesForPracownik ( "/pracownik/" );
+                Main.listFilesForPracownik ();
                 textArea1.setText(Main.listaPlikowP);
             }
             catch ( DbxException dbxException )

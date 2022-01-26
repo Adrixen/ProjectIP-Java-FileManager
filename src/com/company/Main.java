@@ -1,7 +1,5 @@
 package com.company;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
@@ -9,7 +7,6 @@ import java.util.*;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.users.FullAccount;
 import com.dropbox.core.v2.files.*;
 import javax.swing.JFrame;
 import java.awt.Toolkit;
@@ -30,9 +27,6 @@ public class Main
     private JButton        zalogujSieButton;
     private JPasswordField passwordField1;
 
-    static private JPanel panelP;
-    static private JPanel panelK;
-    static private JPanel panelKa;
     static private JFrame frameP;
     static private JFrame frameKa;
 
@@ -102,9 +96,9 @@ public class Main
 
     static void displayGUIComponents()
     {
-        panelP = new Form1().getPanel();
-        panelK = new Form2().getPanel();
-        panelKa = new Form3().getPanel();
+        JPanel panelP  = new Form1 ( ).getPanel ( );
+        JPanel panelK  = new Form2 ( ).getPanel ( );
+        JPanel panelKa = new Form3 ( ).getPanel ( );
 
         frameLogowanie = new JFrame("Zarzadzanie Dokumentami");
         frameLogowanie.setContentPane ( new Main().panelMain );
@@ -133,13 +127,11 @@ public class Main
         centreWindow ( frameKa );
     }
 
-    static void setUpDropboxConnection()
+    static void setUpServerConnection()
     {
         final String ACCESS_TOKEN = "obsUvJMAmrIAAAAAAAAAAaG5pNRcyh36yQNA8kOOQCpamhMX3TcDwjKVg3tFrm_E";
         DbxRequestConfig config = DbxRequestConfig.newBuilder("zarzadzanieDokumentami/0.1").build();
         client  = new DbxClientV2(config, ACCESS_TOKEN);
-        //FullAccount account = client.users().getCurrentAccount(); // sprawdzanie do jakiego konta jest przypisany token
-        //System.out.println(account.getName().getDisplayName()); // sprawdzanie do jakiego konta jest przypisany token
     }
 
     static void uploadFile(File pathSource, String pathDestination)
@@ -156,10 +148,10 @@ public class Main
         }
     }
 
-    static void listFilesForPracownik(String displayPath) throws DbxException
+    static void listFilesForPracownik() throws DbxException
     {
-        List<String> listaPlikow = new ArrayList<String>();
-        result = client.files().listFolder(displayPath);
+        List<String> listaPlikow = new ArrayList<> ( );
+        result = client.files().listFolder("/pracownik/");
         while (true)
         {
             for (Metadata metadata : result.getEntries())
@@ -188,7 +180,7 @@ public class Main
 
     static void listFiles(String displayPath) throws DbxException
     {
-        List<String> listaPlikow = new ArrayList<String>();
+        List<String> listaPlikow = new ArrayList<> ( );
         result = client.files().listFolder(displayPath);
         while (true)
         {
@@ -215,7 +207,7 @@ public class Main
 
     static void deleteFile(String pathDeleteDestination) throws DbxException
     {
-            DeleteResult metadata = client.files().deleteV2(pathDeleteDestination);
+            client.files().deleteV2(pathDeleteDestination);
             System.out.println ( pathDeleteDestination );
             infoBox ( "Usuwanie zakończone powodzeniem!", "Sukces!" );
     }
@@ -272,38 +264,26 @@ public class Main
         {
             try
             {
-                //output file for download --> storage location on local system to download file
-                OutputStream downloadFile = new FileOutputStream(destinationPath);
-                try
+                try (OutputStream downloadFile = new FileOutputStream ( destinationPath ))
                 {
-                    FileMetadata metadata = client.files().downloadBuilder(sourcePath)
-                            .download(downloadFile);
-                }
-                finally
-                {
-                    downloadFile.close();
+                    client.files ( ).downloadBuilder ( sourcePath ).download ( downloadFile );
                 }
             }
-            catch (DbxException e)
+            catch (DbxException | IOException e)
             {
-                JOptionPane.showMessageDialog(null, "Unable to download file to local system\n Error: " + e);
-            }
-            catch (IOException e)
-            {
-                JOptionPane.showMessageDialog(null, "Unable to download file to local system\n Error: " + e);
+                JOptionPane.showMessageDialog(null, "Nie mozna pobrac pliku! \n Blad: " + e);
             }
         }
 
 
             static void moveFile(String sourcePath, String destinationPath) throws DbxException
             {
-                RelocationResult metadata = client.files().moveV2(sourcePath, destinationPath);
+                client.files().moveV2(sourcePath, destinationPath);
             }
 
     public static void main(String[] args)
     {
-        System.out.println ( "Twoj poziom uprawnien to: " + permission );
         displayGUIComponents();
-        setUpDropboxConnection();
+        setUpServerConnection();
     }
 }
