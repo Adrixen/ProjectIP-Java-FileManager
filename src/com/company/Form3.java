@@ -1,7 +1,6 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,7 +40,16 @@ class Form3
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/archiwum/kadry_" + textField1.getText ( ) + ".txt" );
+                try
+                {
+                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/archiwum/" + tempNazwaPliku );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                }
+                catch ( DbxException dbxException )
+                {
+                    dbxException.printStackTrace ( );
+                }
             }
             else
             {
@@ -59,84 +67,54 @@ class Form3
                 dbxException.printStackTrace ( );
             }
         } );
-        pobierzWybranyPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        pobierzWybranyPlikButton.addActionListener ( e -> {
+            Main.saveFile ();
+            String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+            Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+        } );
+        usunPlikButton.addActionListener ( e -> {
+            try
             {
-                Main.saveFile ();
+                Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
+            }
+            catch ( DbxException | IllegalArgumentException dbxException )
+            {
+                Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
+            }
+        } );
+        cofnijPlikDoPoprawyButton.addActionListener ( e -> {
+            try
+            {
                 String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
             }
         } );
-        usunPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        cofnijPlikDoKierownikaButton.addActionListener ( e -> {
+            try
             {
-                try
-                {
-                    Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
-                }
-                catch ( DbxException | IllegalArgumentException dbxException )
-                {
-                    Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
-                }
+                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
             }
         } );
-        cofnijPlikDoPoprawyButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        odswiezListeFolderArchiwumButton.addActionListener ( e -> {
+            try
             {
-                try
-                {
-                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
-                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
+                Main.listFiles ( "/archiwum/" );
+                textArea1.setText(Main.listaPlikowP);
             }
-        } );
-        cofnijPlikDoKierownikaButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+            catch ( DbxException dbxException )
             {
-                try
-                {
-                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
-                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
-            }
-        } );
-        odswiezListeFolderArchiwumButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
-            {
-                try
-                {
-                    Main.listFiles ( "/archiwum/" );
-                    textArea1.setText(Main.listaPlikowP);
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
+                dbxException.printStackTrace ( );
             }
         } );
     }

@@ -1,7 +1,6 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,49 +56,31 @@ class Form2
                 dbxException.printStackTrace ( );
             }
         } );
-        pobierzWybranyPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        pobierzWybranyPlikButton.addActionListener ( e -> {
+            Main.saveFile ();
+            String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+            Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+        } );
+        usunPlikButton.addActionListener ( e -> {
+            try
             {
-                Main.saveFile ();
+                Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
+            }
+            catch ( DbxException | IllegalArgumentException dbxException )
+            {
+                Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
+            }
+        } );
+        cofnijPlikDoPoprawyButton.addActionListener ( e -> {
+            try
+            {
                 String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
             }
-        } );
-        usunPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+            catch ( DbxException dbxException )
             {
-                try
-                {
-                    Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
-                }
-                catch ( DbxException | IllegalArgumentException dbxException )
-                {
-                    Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
-                }
-            }
-        } );
-        cofnijPlikDoPoprawyButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
-            {
-                try
-                {
-                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
-                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
+                dbxException.printStackTrace ( );
             }
         } );
     }

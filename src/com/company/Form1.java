@@ -1,7 +1,6 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,32 +65,20 @@ class Form1
                 dbxException.printStackTrace ( );
             }
         } );
-        pobierzWybranyPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
-            {
-                Main.saveFile ();
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
-                //Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + textField1.getText ( ) + ".txt" ) );
-            }
+        pobierzWybranyPlikButton.addActionListener ( e -> {
+            Main.saveFile ();
+            String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+            Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+            //Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + textField1.getText ( ) + ".txt" ) );
         } );
-        usunPlikButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        usunPlikButton.addActionListener ( e -> {
+            try
             {
-                try
-                {
-                    Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
-                }
-                catch ( DbxException | IllegalArgumentException dbxException )
-                {
-                    Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
-                }
+                Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
+            }
+            catch ( DbxException | IllegalArgumentException dbxException )
+            {
+                Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
             }
         } );
     }

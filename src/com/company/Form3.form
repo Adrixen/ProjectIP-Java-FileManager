@@ -50,7 +50,7 @@
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Wyslij plik do archiwum"/>
+          <text value="Zatwierdź do archiwum"/>
         </properties>
       </component>
       <component id="7fc21" class="javax.swing.JTextField" binding="nazwaPlikuDoPobraniaTextField" default-binding="true">
@@ -60,7 +60,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Plik do pobrania lub usunięcia (skopiuj z listy)"/>
+          <text value="Plik do zatwierdzenia, pobrania lub usunięcia (skopiuj z listy)"/>
         </properties>
       </component>
       <component id="632c2" class="javax.swing.JButton" binding="pobierzWybranyPlikButton" default-binding="true">
