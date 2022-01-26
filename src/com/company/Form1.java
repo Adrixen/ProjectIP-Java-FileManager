@@ -28,7 +28,7 @@ class Form1
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/pracownik/pracownik_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -58,7 +58,7 @@ class Form1
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/pracownik/" );
+                Main.listFilesForPracownik ( "/pracownik/" );
                 textArea1.setText(Main.listaPlikowP);
             }
             catch ( DbxException dbxException )

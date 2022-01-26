@@ -38,6 +38,8 @@ public class Main
 
     static DbxClientV2 client;
 
+    static String idPracownika;
+
     public Main ( )
     {
         zalogujSieButton.addActionListener ( e -> {
@@ -64,6 +66,7 @@ public class Main
             {
                 zalogowanyPomyslnie=1;
                 System.out.println ( "Zalogowany jako " + inputLine + "!" );
+                idPracownika = inputLine.substring(inputLine.lastIndexOf("_") + 1).trim();
                 if(inputLine.startsWith("p"))
                 {
                     permission=1;
@@ -153,7 +156,7 @@ public class Main
         }
     }
 
-    static void listFiles(String displayPath) throws DbxException
+    static void listFilesForPracownik(String displayPath) throws DbxException
     {
         List<String> listaPlikow = new ArrayList<String>();
         result = client.files().listFolder(displayPath);
@@ -162,7 +165,10 @@ public class Main
             for (Metadata metadata : result.getEntries())
             {
                 //System.out.println(metadata.getPathLower());
-                listaPlikow.add(metadata.getPathLower());
+                if(metadata.getPathLower ().contains ( idPracownika ))
+                {
+                    listaPlikow.add ( metadata.getPathLower ( ) );
+                }
             }
 
             if (!result.getHasMore()) {
@@ -174,8 +180,35 @@ public class Main
         StringBuilder sb = new StringBuilder();
         for (String s : listaPlikow)
         {
-            sb.append(s);
-            sb.append("\n");
+                sb.append ( s );
+                sb.append ( "\n" );
+        }
+        listaPlikowP = sb.toString();
+    }
+
+    static void listFiles(String displayPath) throws DbxException
+    {
+        List<String> listaPlikow = new ArrayList<String>();
+        result = client.files().listFolder(displayPath);
+        while (true)
+        {
+            for (Metadata metadata : result.getEntries())
+            {
+                //System.out.println(metadata.getPathLower());
+                listaPlikow.add ( metadata.getPathLower ( ) );
+            }
+
+            if (!result.getHasMore()) {
+                break;
+            }
+
+            result = client.files().listFolderContinue(result.getCursor());
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s : listaPlikow)
+        {
+            sb.append ( s );
+            sb.append ( "\n" );
         }
         listaPlikowP = sb.toString();
     }
