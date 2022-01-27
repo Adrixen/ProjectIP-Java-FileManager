@@ -5,9 +5,9 @@ import javax.swing.*;
 import java.io.File;
 
 public
-class Form2
+class Kadry
 {
-    private JPanel  panelKierownik;
+    private JPanel  panelKadry;
     private JButton chooserButton;
     private JButton wyslijPlikButton;
     private JTextField textField1;
@@ -18,15 +18,16 @@ class Form2
     private JTextField nazwaPlikuDoPobraniaTextField;
     private JButton usunPlikButton;
     private JButton cofnijPlikDoPoprawyButton;
+    private JButton odswiezListeFolderArchiwumButton;
+    private JButton cofnijPlikDoKierownikaButton;
 
-    public
-    Form2 ( )
+    public Kadry( )
     {
         chooserButton.addActionListener ( e -> Main.chooseFile () );
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/kierownik/kierownik_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kadry/kadry_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -36,7 +37,16 @@ class Form2
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/kadry/kierownik_" + textField1.getText ( ) + ".txt" );
+                try
+                {
+                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/archiwum/" + tempNazwaPliku );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                }
+                catch ( DbxException dbxException )
+                {
+                    dbxException.printStackTrace ( );
+                }
             }
             else
             {
@@ -46,7 +56,7 @@ class Form2
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/kierownik/" );
+                Main.listFiles ( "/kadry/" );
                 textArea1.setText(Main.listaPlikowP);
             }
             catch ( DbxException dbxException )
@@ -81,9 +91,32 @@ class Form2
                 dbxException.printStackTrace ( );
             }
         } );
+        cofnijPlikDoKierownikaButton.addActionListener ( e -> {
+            try
+            {
+                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+        } );
+        odswiezListeFolderArchiwumButton.addActionListener ( e -> {
+            try
+            {
+                Main.listFiles ( "/archiwum/" );
+                textArea1.setText(Main.listaPlikowP);
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+        } );
     }
 
     public JPanel getPanel() {
-        return panelKierownik;
+        return panelKadry;
     }
 }

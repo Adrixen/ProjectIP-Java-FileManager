@@ -95,9 +95,9 @@ public class Main
 
     static void displayGUIComponents()
     {
-        JPanel panelP  = new Form1 ( ).getPanel ( );
-        JPanel panelK  = new Form2 ( ).getPanel ( );
-        JPanel panelKa = new Form3 ( ).getPanel ( );
+        JPanel panelP  = new Pracownik( ).getPanel ( );
+        JPanel panelK  = new Kierownik( ).getPanel ( );
+        JPanel panelKa = new Kadry( ).getPanel ( );
 
         frameLogowanie = new JFrame("Zarzadzanie Dokumentami");
         frameLogowanie.setContentPane ( new Main().panelMain );
@@ -263,7 +263,7 @@ public class Main
     {
         try (OutputStream downloadFile = new FileOutputStream ( destinationPath ))
         {
-            client.files ( ).downloadBuilder ( sourcePath ).download ( downloadFile );
+            client.files().downloadBuilder ( sourcePath ).download ( downloadFile );
         }
         catch (DbxException | IOException e)
         {

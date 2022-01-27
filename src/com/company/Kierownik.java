@@ -5,9 +5,9 @@ import javax.swing.*;
 import java.io.File;
 
 public
-class Form1
+class Kierownik
 {
-    private JPanel  panelPracownik;
+    private JPanel  panelKierownik;
     private JButton chooserButton;
     private JButton wyslijPlikButton;
     private JTextField textField1;
@@ -16,16 +16,16 @@ class Form1
     private JTextArea textArea1;
     private JButton    pobierzWybranyPlikButton;
     private JTextField nazwaPlikuDoPobraniaTextField;
-    private JButton    usunPlikButton;
+    private JButton usunPlikButton;
+    private JButton cofnijPlikDoPoprawyButton;
 
-    public
-    Form1 ( )
+    public Kierownik( )
     {
         chooserButton.addActionListener ( e -> Main.chooseFile () );
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + " - " + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kierownik/kierownik_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -35,16 +35,7 @@ class Form1
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                try
-                {
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                Main.uploadFile ( Main.pathPliku , "/kadry/kierownik_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -54,7 +45,7 @@ class Form1
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFilesForPracownik ();
+                Main.listFiles ( "/kierownik/" );
                 textArea1.setText(Main.listaPlikowP);
             }
             catch ( DbxException dbxException )
@@ -77,9 +68,21 @@ class Form1
                 Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
             }
         } );
+        cofnijPlikDoPoprawyButton.addActionListener ( e -> {
+            try
+            {
+                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+        } );
     }
 
     public JPanel getPanel() {
-        return panelPracownik;
+        return panelKierownik;
     }
 }
