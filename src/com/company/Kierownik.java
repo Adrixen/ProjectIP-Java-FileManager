@@ -4,6 +4,11 @@ import com.dropbox.core.DbxException;
 import javax.swing.*;
 import java.io.File;
 
+
+/**
+ *  Klasa która jest GUI dla kierownika
+ *  W danej klasie zaimplementowane GUI.
+ */
 public
 class Kierownik
 {

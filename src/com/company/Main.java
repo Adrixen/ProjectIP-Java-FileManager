@@ -11,7 +11,11 @@ import com.dropbox.core.v2.files.*;
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Window;
-
+/**
+ * Klasa główna programu
+ *
+ * 	W danej klasie są metody które głównie służą do zarządzania całym systemem
+*/
 public class Main
 {
     static DbxClientV2 client;
@@ -35,6 +39,9 @@ public class Main
     static String tempFileExtension;
     static String idPracownika;
 
+    /*!
+    Konstruktor programu.
+    */
     public Main ( )
     {
         zalogujSieButton.addActionListener ( e -> {
@@ -48,7 +55,11 @@ public class Main
             }
         } );
     }
-
+    /**
+     *  Metoda służy do łogowania w aplikacje jako kierownik/kadry/pracownik.
+     *
+     * 	@param password hasło do łogowania
+     */
     static void logowanie(char[] password) throws IOException
     {
         URL url = new URL("https://gist.githubusercontent.com/Adrixen/95e1a2a6bfad61933d5de5b3190e4f32/raw/55e31b1b75e4d7a80622476e3a176eeadf407571");
@@ -89,12 +100,20 @@ public class Main
         }
         in.close();
     }
-
+    /**
+     *  Wyświetla wiadomość zwrotną do użytkownika
+     *
+     * 	@param titleBar zawartość tytułu wiadomości
+     * @param infoMessage zawartość wiadomości która będzie pokazywana użytkownikowi.
+     */
     public static void infoBox(String infoMessage, String titleBar)
     {
         JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     *     Metoda głównie służy do wyświetlenia interfejsu.
+     */
     static void displayGUIComponents()
     {
         JPanel panelPracownik  = new Pracownik( ).getPanel ( );
@@ -128,13 +147,20 @@ public class Main
         centreWindow ( frameKadry );
     }
 
+    /**
+     *       Metoda służy do połączenie z serwerem zewnętrznym, w którym są przechowywane wszystkie pliki.
+     */
     static void setUpServerConnection()
     {
         final String ACCESS_TOKEN = "obsUvJMAmrIAAAAAAAAAAaG5pNRcyh36yQNA8kOOQCpamhMX3TcDwjKVg3tFrm_E";
         DbxRequestConfig config = DbxRequestConfig.newBuilder("zarzadzanieDokumentami/0.1").build();
         client  = new DbxClientV2(config, ACCESS_TOKEN);
     }
-
+    /**
+     * Metoda służy do wysłania plików na serwer.
+     * @param pathSource ścieżka do pliku
+     * @param pathDestination ścieżka gdzie będzie umieszczony plik na serwerze
+     */
     static void uploadFile(File pathSource, String pathDestination)
     {
         try
@@ -149,6 +175,9 @@ public class Main
         }
     }
 
+    /**
+     * Metoda służy do wyświetlania zawartości plików na serwerze dla załogowanego pracownika.
+     */
     static void listFilesForPracownik() throws DbxException
     {
         List<String> listaPlikow = new ArrayList<>();
@@ -181,7 +210,9 @@ public class Main
         }
         listaPlikowP = sb.toString();
     }
-
+    /**
+     * Metoda wyświetla listę wszystkich plików na serwerze.
+     */
     static void listFiles(String displayPath) throws DbxException
     {
         List<String> listaPlikow = new ArrayList<> ( );
@@ -210,13 +241,19 @@ public class Main
         }
         listaPlikowP = sb.toString();
     }
-
+    /**
+     * Metoda służy do usunięcia wybranego pliku z serwera.
+     * @param pathDeleteDestination ścieżka (na serwerze) wraz z nazwą pliku który musi być usunięty
+     */
     static void deleteFile(String pathDeleteDestination) throws DbxException
     {
             client.files().deleteV2(pathDeleteDestination);
             infoBox ( "Usuwanie zakończone powodzeniem!", "Sukces!" );
     }
 
+    /**
+     * Metoda służy do wybrania plików z komputera użytkownika.
+     */
     static void chooseFile()
     {
         JFileChooser chooser = new JFileChooser();
@@ -237,6 +274,9 @@ public class Main
         }
     }
 
+    /**
+     * Metoda do zapisywanie się pliku.
+     */
     static void saveFile()
     {
         JFileChooser saver = new JFileChooser();
@@ -255,6 +295,10 @@ public class Main
         }
     }
 
+    /**
+     * Metoda służy do zmiany pozycji na ekranie.
+     * @param frame okno aplikacji
+     */
     static void centreWindow(Window frame)
     {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -263,6 +307,11 @@ public class Main
         frame.setLocation(x, y);
     }
 
+    /**
+     *  Metoda do zgrywania plików z serwera.
+     * @param destinationPath ścieżka do pliku na serwerze
+     * @param sourcePath ścieżka gdzie będzie zapisany plik na komputerze.
+     */
     static void downloadFile(String sourcePath, File destinationPath)
     {
         try (OutputStream downloadFile = new FileOutputStream ( destinationPath ))
@@ -274,12 +323,20 @@ public class Main
             JOptionPane.showMessageDialog(null, "Nie mozna pobrac pliku! \n Blad: " + e);
         }
     }
-    
+
+    /**
+     *  Metoda służy do przesuwania plików na serwerze z określonego folderu do innego.
+     * @param destinationPath ścieżka do nowego folderu
+     * @param sourcePath ścieżka gdzie jest umieszczony plik
+     */
     static void moveFile(String sourcePath, String destinationPath) throws DbxException
     {
         client.files().moveV2(sourcePath, destinationPath);
     }
 
+    /**
+     *  Metoda główna, która uruchamia się program.
+     */
     public static void main(String[] args)
     {
         displayGUIComponents();

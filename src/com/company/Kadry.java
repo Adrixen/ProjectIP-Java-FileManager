@@ -4,6 +4,10 @@ import com.dropbox.core.DbxException;
 import javax.swing.*;
 import java.io.File;
 
+/**
+ *  Klasa która jest GUI dla kadrów
+ *  W danej klasie zaimplementowane GUI.
+ */
 public
 class Kadry
 {

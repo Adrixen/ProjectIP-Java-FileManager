@@ -4,6 +4,12 @@ import com.dropbox.core.DbxException;
 import javax.swing.*;
 import java.io.File;
 
+
+
+/**
+ *  Klasa która jest GUI dla pracownika
+ *  W danej klasie zaimplementowane GUI.
+ */
 public
 class Pracownik
 {
