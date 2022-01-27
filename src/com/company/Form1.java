@@ -25,7 +25,7 @@ class Form1
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + " - " + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -45,7 +45,6 @@ class Form1
                     dbxException.printStackTrace ( );
                 }
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
-                //Main.uploadFile ( Main.pathPliku , "/kierownik/pracownik_" + textField1.getText ( ) + ".txt" );
             }
             else
             {
@@ -67,7 +66,6 @@ class Form1
             Main.saveFile ();
             String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
             Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
-            //Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + textField1.getText ( ) + ".txt" ) );
         } );
         usunPlikButton.addActionListener ( e -> {
             try

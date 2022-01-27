@@ -16,7 +16,7 @@
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Wybierz plik do wyslania"/>
+          <text value="Wybierz plik do wysłania"/>
         </properties>
       </component>
       <component id="7fbc" class="javax.swing.JButton" binding="wyslijPlikButton" default-binding="true">
@@ -24,7 +24,7 @@
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Wyslij plik do swojego folderu"/>
+          <text value="Wyślij plik do swojego folderu"/>
         </properties>
       </component>
       <component id="b734e" class="javax.swing.JTextField" binding="textField1" default-binding="true">
@@ -42,7 +42,7 @@
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Określ nazwę z jaką plik się wyśle na server"/>
+          <text value="Określ nazwę z jaką plik wyśle się na server:"/>
         </properties>
       </component>
       <component id="2f7be" class="javax.swing.JButton" binding="wyslijPlikDoZatwierdzeniaButton" default-binding="true">
@@ -76,7 +76,7 @@
           <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Odswiez liste folder kadry"/>
+          <text value="Odśwież listę (folder kadry)"/>
         </properties>
       </component>
       <component id="c43a3" class="javax.swing.JButton" binding="usunPlikButton">
@@ -106,7 +106,7 @@
             <constraints/>
             <properties>
               <editable value="false"/>
-              <text value="Lista plikow"/>
+              <text value="Lista plików"/>
             </properties>
           </component>
         </children>
@@ -116,7 +116,7 @@
           <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Odswiez liste folder archiwum"/>
+          <text value="Odśwież listę (folder archiwum)"/>
         </properties>
       </component>
       <component id="fc758" class="javax.swing.JButton" binding="cofnijPlikDoKierownikaButton" default-binding="true">
