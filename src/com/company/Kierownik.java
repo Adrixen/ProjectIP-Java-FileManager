@@ -25,7 +25,7 @@ class Kierownik
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/kierownik/kierownik_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kierownik/kierownik_" + textField1.getText ( ) + "." + Main.tempFileExtension );
             }
             else
             {
@@ -35,11 +35,16 @@ class Kierownik
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/kadry/kierownik_" + textField1.getText ( ) + ".txt" );
-            }
-            else
-            {
-                Main.infoBox ( "Podaj nazwe pliku!","Error" );
+                try
+                {
+                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kadry/" + tempNazwaPliku );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                }
+                catch ( DbxException dbxException )
+                {
+                    dbxException.printStackTrace ( );
+                }
             }
         } );
         odswiezListePlikowButton.addActionListener ( e -> {

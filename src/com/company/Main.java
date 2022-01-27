@@ -21,9 +21,9 @@ public class Main
 
     private JPanel panelMain;
     static private JFrame frameLogowanie;
-    static private JFrame frameP;
-    static private JFrame frameK;
-    static private JFrame frameKa;
+    static private JFrame framePracownik;
+    static private JFrame frameKierownik;
+    static private JFrame frameKadry;
 
     private JButton zalogujSieButton;
     private JPasswordField passwordField;
@@ -31,6 +31,8 @@ public class Main
     static String listaPlikowP;
     static File pathFolderu;
     static File pathPliku;
+    static String tempFileName;
+    static String tempFileExtension;
     static String idPracownika;
 
     public Main ( )
@@ -64,17 +66,17 @@ public class Main
                 if(inputLine.startsWith("p"))
                 {
                     permission=1;
-                    frameP.setVisible(true);
+                    framePracownik.setVisible(true);
                 }
                 else if(inputLine.startsWith("ki"))
                 {
                     permission=2;
-                    frameK.setVisible(true);
+                    frameKierownik.setVisible(true);
                 }
                 else if(inputLine.startsWith("ka"))
                 {
                     permission=3;
-                    frameKa.setVisible(true);
+                    frameKadry.setVisible(true);
                 }
                 System.out.println ( "Twoj poziom uprawnien to: " + permission );
                 frameLogowanie.setVisible(false);
@@ -95,9 +97,9 @@ public class Main
 
     static void displayGUIComponents()
     {
-        JPanel panelP  = new Pracownik( ).getPanel ( );
-        JPanel panelK  = new Kierownik( ).getPanel ( );
-        JPanel panelKa = new Kadry( ).getPanel ( );
+        JPanel panelPracownik  = new Pracownik( ).getPanel ( );
+        JPanel panelKierownik  = new Kierownik( ).getPanel ( );
+        JPanel panelKadry = new Kadry( ).getPanel ( );
 
         frameLogowanie = new JFrame("Zarzadzanie Dokumentami");
         frameLogowanie.setContentPane ( new Main().panelMain );
@@ -105,25 +107,25 @@ public class Main
         frameLogowanie.pack();
         frameLogowanie.setVisible(true);
 
-        frameP = new JFrame("Zarzadzanie Dokumentami - Pracownik");
-        frameP.setContentPane ( panelP );
-        frameP.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameP.pack();
+        framePracownik = new JFrame("Zarzadzanie Dokumentami - Pracownik");
+        framePracownik.setContentPane ( panelPracownik );
+        framePracownik.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        framePracownik.pack();
 
-        frameK = new JFrame("Zarzadzanie Dokumentami - Kierownik");
-        frameK.setContentPane ( panelK );
-        frameK.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameK.pack();
+        frameKierownik = new JFrame("Zarzadzanie Dokumentami - Kierownik");
+        frameKierownik.setContentPane ( panelKierownik );
+        frameKierownik.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameKierownik.pack();
 
-        frameKa = new JFrame("Zarzadzanie Dokumentami - Kadry");
-        frameKa.setContentPane ( panelKa );
-        frameKa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frameKa.pack();
+        frameKadry = new JFrame("Zarzadzanie Dokumentami - Kadry");
+        frameKadry.setContentPane ( panelKadry );
+        frameKadry.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameKadry.pack();
 
         centreWindow ( frameLogowanie );
-        centreWindow ( frameP );
-        centreWindow ( frameK );
-        centreWindow ( frameKa );
+        centreWindow ( framePracownik );
+        centreWindow ( frameKierownik );
+        centreWindow ( frameKadry );
     }
 
     static void setUpServerConnection()
@@ -226,6 +228,8 @@ public class Main
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             pathPliku=chooser.getSelectedFile();
+            tempFileName = chooser.getSelectedFile().getName();
+            tempFileExtension = tempFileName.substring(tempFileName.lastIndexOf(".") + 1).trim();
         }
         else
         {

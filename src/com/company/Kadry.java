@@ -27,7 +27,7 @@ class Kadry
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/kadry/kadry_" + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/kadry/kadry_" + textField1.getText ( ) + "." + Main.tempFileExtension );
             }
             else
             {

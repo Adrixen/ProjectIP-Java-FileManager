@@ -24,7 +24,7 @@ class Pracownik
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + " - " + textField1.getText ( ) + ".txt" );
+                Main.uploadFile ( Main.pathPliku , "/pracownik/"+ Main.idPracownika + " - " + textField1.getText ( ) + "." + Main.tempFileExtension );
             }
             else
             {
