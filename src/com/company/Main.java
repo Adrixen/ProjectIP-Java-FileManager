@@ -152,9 +152,16 @@ public class Main
      */
     static void setUpServerConnection()
     {
-        final String ACCESS_TOKEN = "obsUvJMAmrIAAAAAAAAAAaG5pNRcyh36yQNA8kOOQCpamhMX3TcDwjKVg3tFrm_E";
-        DbxRequestConfig config = DbxRequestConfig.newBuilder("zarzadzanieDokumentami/0.1").build();
-        client  = new DbxClientV2(config, ACCESS_TOKEN);
+        try
+        {
+            final String     ACCESS_TOKEN = "obsUvJMAmrIAAAAAAAAAAaG5pNRcyh36yQNA8kOOQCpamhMX3TcDwjKVg3tFrm_E";
+            DbxRequestConfig config       = DbxRequestConfig.newBuilder ( "zarzadzanieDokumentami/0.1" ).build ( );
+            client = new DbxClientV2 ( config , ACCESS_TOKEN );
+        }
+        catch ( Exception e )
+        {
+            infoBox ( "Nie można połączyć się z serverem!", "Error!" );
+        }
     }
     /**
      * Metoda służy do wysłania plików na serwer.
