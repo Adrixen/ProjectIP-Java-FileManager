@@ -1,16 +1,24 @@
 package com.company;
 
-import java.net.*;
-import java.io.*;
-import javax.swing.*;
-import java.util.*;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.*;
+import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.files.Metadata;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
-import java.awt.Dimension;
-import java.awt.Window;
+import java.awt.datatransfer.Clipboard;
+
 /**
  * Klasa główna programu
  *
@@ -30,6 +38,7 @@ public class Main
     static private JFrame frameKadry;
 
     private JButton zalogujSieButton;
+    private JButton zarejestrujSieButton;
     private JPasswordField passwordField;
 
     static String listaPlikowP;
@@ -38,7 +47,7 @@ public class Main
     static String tempFileName;
     static String tempFileExtension;
     static String idPracownika;
-
+    static String tempHash;
     /*!
     Konstruktor programu.
     */
@@ -49,18 +58,42 @@ public class Main
             {
                 logowanie( passwordField.getPassword ( ) );
             }
-            catch ( IOException ioException )
+            catch ( IOException | NoSuchAlgorithmException | InvalidKeySpecException ioException )
             {
                 ioException.printStackTrace ( );
             }
         } );
+        zarejestrujSieButton.addActionListener ( e -> {
+            try
+            {
+                tempHash=PasswordHash.createHash ( passwordField.getPassword ( ));
+                if(passwordField.getPassword().length==0)
+                {
+                    infoBox ( "1. Hasło nie może być puste \n" +
+                                          "2. Hasło musi na końcu zawierać identyfikator podany przez administratora poprzedzony podłogą"
+                            ,"Rejestracja w toku..");
+                }
+                else
+                {
+                    StringSelection selection = new StringSelection(tempHash);
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(selection, selection);
+                    infoBox ( "Hash twojego hasła to:\n" + tempHash + "\nZostał on skopiowany do schowka, podaj go administratorowi",
+                              "Rejestracja w toku.." );
+                }
+            }
+            catch ( NoSuchAlgorithmException | InvalidKeySpecException noSuchAlgorithmException )
+            {
+                noSuchAlgorithmException.printStackTrace ( );
+            }
+        } );
     }
     /**
-     *  Metoda służy do łogowania w aplikacje jako kierownik/kadry/pracownik.
+     *  Metoda służy do logowania w aplikacji jako kierownik/kadry/pracownik.
      *
      * 	@param password hasło do łogowania
      */
-    static void logowanie(char[] password) throws IOException
+    static void logowanie(char[] password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
     {
         URL url = new URL("https://gist.githubusercontent.com/Adrixen/95e1a2a6bfad61933d5de5b3190e4f32/raw/55e31b1b75e4d7a80622476e3a176eeadf407571");
         BufferedReader in = new BufferedReader( new InputStreamReader(url.openStream()));
@@ -68,23 +101,23 @@ public class Main
 
         while ((inputLine = in.readLine()) != null)
         {
-            if( inputLine.equals ( new String(password) ) )
+            if( PasswordHash.validatePassword (password, inputLine) )
             {
                 zalogowanyPomyslnie=1;
-                System.out.println ( "Zalogowany jako " + inputLine + "!" );
-                idPracownika = inputLine.substring(inputLine.lastIndexOf("_") + 1).trim();
+                idPracownika = String.valueOf ( password ).substring(String.valueOf ( password ).lastIndexOf("_") + 1).trim();
+                System.out.println ( "Zalogowany jako " + idPracownika + "!" );
 
-                if(inputLine.startsWith("p"))
+                if(idPracownika.startsWith("pr"))
                 {
                     permission=1;
                     framePracownik.setVisible(true);
                 }
-                else if(inputLine.startsWith("ki"))
+                else if(idPracownika.startsWith("ki"))
                 {
                     permission=2;
                     frameKierownik.setVisible(true);
                 }
-                else if(inputLine.startsWith("ka"))
+                else if(idPracownika.startsWith("ka"))
                 {
                     permission=3;
                     frameKadry.setVisible(true);
@@ -344,7 +377,7 @@ public class Main
     /**
      *  Metoda główna, która uruchamia się program.
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
     {
         displayGUIComponents();
         setUpServerConnection();
