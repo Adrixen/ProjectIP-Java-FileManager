@@ -5,6 +5,6 @@ To do:
 - [X] Dodać możliwość wyświetlania dokumentów dla kierownika i kadr
 - [X] Dodać możliwość wyświetlania różnych stron dokumentów poprzez przyciski następna i poprzednia strona
 - [ ] Dodać możliwość dodawania notatek do dokumentów
-- [ ] Ustawić automatyczne odświeżanie listy dokumentów
+- [X] Ustawić automatyczne odświeżanie listy dokumentów
 - [X] Dodać przycisk wyloguj
 - [X] Dodać wybieranie plików za pomocą kliknięcia

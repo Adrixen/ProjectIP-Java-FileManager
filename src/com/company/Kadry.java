@@ -26,9 +26,67 @@ class Kadry
     private JButton wyswietlDokumentButton;
     private JButton wylogujButton;
     private JList<String> list1;
+    static boolean refreshKadry=true;
+    void refresherPlikowKadry() throws DbxException
+    {
+        Main.listFiles ( "/kadry/" );
+        DefaultListModel<String> list  = new DefaultListModel<> ();
+        String[] items = Main.listaPlikowP.split("\n");
+
+        for(String item : items)
+        {
+            list.addElement(item);
+        }
+        list1.setModel(list);
+    }
+
+    void refresherPlikowArchiwum() throws DbxException
+    {
+        Main.listFiles ( "/archiwum/" );
+        DefaultListModel<String> list  = new DefaultListModel<> ();
+        String[] items = Main.listaPlikowP.split("\n");
+
+        for(String item : items)
+        {
+            list.addElement(item);
+        }
+        list1.setModel(list);
+    }
 
     public Kadry( )
     {
+        Runnable runnable =
+                ( ) -> {
+                    while ( true )
+                    {
+                        try
+                        {
+                            if ( refreshKadry && Main.permission == 3 && list1.isSelectionEmpty () )
+                            {
+                                refresherPlikowKadry ( );
+                            }
+                            else if( ! refreshKadry && Main.permission == 3 && list1.isSelectionEmpty ())
+                            {
+                                refresherPlikowArchiwum ();
+                            }
+                        }
+                        catch ( DbxException dbxException )
+                        {
+                            dbxException.printStackTrace ( );
+                        }
+                        try
+                        {
+                            Thread.sleep ( 2000 );
+                        }
+                        catch ( InterruptedException interruptedException )
+                        {
+                            interruptedException.printStackTrace ( );
+                            Thread.currentThread ( ).interrupt ( );
+                        }
+                    }
+                };
+        Thread threadKadryRefresher = new Thread ( runnable );
+        threadKadryRefresher.start ( );
         chooserButton.addActionListener ( e -> Main.chooseFile () );
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
@@ -48,6 +106,7 @@ class Kadry
                     String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                     Main.moveFile ( list1.getSelectedValue(),"/archiwum/" + tempNazwaPliku );
                     Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                    list1.clearSelection ();
                 }
                 catch ( DbxException dbxException )
                 {
@@ -62,15 +121,8 @@ class Kadry
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/kadry/" );
-                DefaultListModel<String> list  = new DefaultListModel<> ();
-                String[] items = Main.listaPlikowP.split("\n");
-
-                for(String item : items)
-                {
-                    list.addElement(item);
-                }
-                list1.setModel(list);
+                refreshKadry=true;
+                refresherPlikowKadry ();
             }
             catch ( DbxException dbxException )
             {
@@ -81,11 +133,13 @@ class Kadry
             Main.saveFile ();
             String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
             Main.downloadFile ( list1.getSelectedValue(), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+            list1.clearSelection ();
         } );
         usunPlikButton.addActionListener ( e -> {
             try
             {
                 Main.deleteFile (list1.getSelectedValue());
+                list1.clearSelection ();
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
@@ -98,6 +152,7 @@ class Kadry
                 String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                 Main.moveFile ( list1.getSelectedValue(),"/pracownik/" + tempNazwaPliku );
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                list1.clearSelection ();
             }
             catch ( DbxException dbxException )
             {
@@ -110,6 +165,7 @@ class Kadry
                 String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                 Main.moveFile ( list1.getSelectedValue(),"/kierownik/" + tempNazwaPliku );
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                list1.clearSelection ();
             }
             catch ( DbxException dbxException )
             {
@@ -119,15 +175,8 @@ class Kadry
         odswiezListeFolderArchiwumButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/archiwum/" );
-                DefaultListModel<String> list  = new DefaultListModel<> ();
-                String[] items = Main.listaPlikowP.split("\n");
-
-                for(String item : items)
-                {
-                    list.addElement(item);
-                }
-                list1.setModel(list);
+                refreshKadry=false;
+                refresherPlikowArchiwum ();
             }
             catch ( DbxException dbxException )
             {
@@ -138,6 +187,7 @@ class Kadry
             Main.frameKadry.setVisible ( false );
             Main.zalogowanyPomyslnie=0;
             Main.frameLogowanie.setVisible ( true );
+            list1.clearSelection ();
         } );
         wyswietlDokumentButton.addActionListener ( e -> {
             try
@@ -145,10 +195,14 @@ class Kadry
                 DocumentPreview.numerStrony=0;
                 Main.generateFilePreview (list1.getSelectedValue());
                 DocumentPreview.displayDocument();
+                list1.clearSelection ();
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
-                Main.infoBox ( "Wystąpił błąd, prawdopodobnie została podana nieprawidłowa ścieżka do pliku lub został wybrany nieobsługiwany format pliku.\nDozwolone formaty to: .ai, .doc, .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx, .rtf.","Error" );
+                Main.infoBox ( "Wystąpił błąd, prawdopodobnie została podana nieprawidłowa ścieżka do pliku" +
+                                       " lub został wybrany nieobsługiwany format pliku.\nDozwolone formaty to: .ai, .doc," +
+                                       " .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx," +
+                                       " .rtf.","Error" );
             }
         } );
     }

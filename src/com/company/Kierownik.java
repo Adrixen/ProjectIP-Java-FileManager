@@ -26,8 +26,49 @@ class Kierownik
     private JButton wylogujButton;
     private JList<String> list1;
 
+    void refresherPlikow() throws DbxException
+    {
+        Main.listFiles ( "/kierownik/" );
+        DefaultListModel<String> list  = new DefaultListModel<> ();
+        String[] items = Main.listaPlikowP.split("\n");
+
+        for(String item : items)
+        {
+            list.addElement(item);
+        }
+        list1.setModel(list);
+    }
+
     public Kierownik( )
     {
+        Runnable runnable =
+                ( ) -> {
+                    while ( true )
+                    {
+                        try
+                        {
+                            if ( Main.permission == 2 && list1.isSelectionEmpty () )
+                            {
+                                refresherPlikow ( );
+                            }
+                        }
+                        catch ( DbxException dbxException )
+                        {
+                            dbxException.printStackTrace ( );
+                        }
+                        try
+                        {
+                            Thread.sleep ( 2000 );
+                        }
+                        catch ( InterruptedException interruptedException )
+                        {
+                            interruptedException.printStackTrace ( );
+                            Thread.currentThread ( ).interrupt ( );
+                        }
+                    }
+                };
+        Thread threadKierownikRefresher = new Thread ( runnable );
+        threadKierownikRefresher.start ( );
         chooserButton.addActionListener ( e -> Main.chooseFile () );
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
@@ -47,6 +88,7 @@ class Kierownik
                     String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                     Main.moveFile ( list1.getSelectedValue(),"/kadry/" + tempNazwaPliku );
                     Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                    list1.clearSelection ();
                 }
                 catch ( DbxException dbxException )
                 {
@@ -57,15 +99,7 @@ class Kierownik
         odswiezListePlikowButton.addActionListener ( e -> {
             try
             {
-                Main.listFiles ( "/kierownik/" );
-                DefaultListModel<String> list  = new DefaultListModel<> ();
-                String[] items = Main.listaPlikowP.split("\n");
-
-                for(String item : items)
-                {
-                    list.addElement(item);
-                }
-                list1.setModel(list);
+                refresherPlikow ();
             }
             catch ( DbxException dbxException )
             {
@@ -76,11 +110,13 @@ class Kierownik
             Main.saveFile ();
             String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
             Main.downloadFile ( list1.getSelectedValue(), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+            list1.clearSelection ();
         } );
         usunPlikButton.addActionListener ( e -> {
             try
             {
                 Main.deleteFile (list1.getSelectedValue());
+                list1.clearSelection ();
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
@@ -93,6 +129,7 @@ class Kierownik
                 String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                 Main.moveFile ( list1.getSelectedValue(),"/pracownik/" + tempNazwaPliku );
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+                list1.clearSelection ();
             }
             catch ( DbxException dbxException )
             {
@@ -103,6 +140,7 @@ class Kierownik
             Main.frameKierownik.setVisible ( false );
             Main.zalogowanyPomyslnie=0;
             Main.frameLogowanie.setVisible ( true );
+            list1.clearSelection ();
         } );
         wyswietlDokumentButton.addActionListener ( e -> {
             try
@@ -110,10 +148,14 @@ class Kierownik
                 DocumentPreview.numerStrony=0;
                 Main.generateFilePreview ( list1.getSelectedValue() );
                 DocumentPreview.displayDocument();
+                list1.clearSelection ();
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
-                Main.infoBox ( "Wystąpił błąd, prawdopodobnie została podana nieprawidłowa ścieżka do pliku lub został wybrany nieobsługiwany format pliku.\nDozwolone formaty to: .ai, .doc, .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx, .rtf.","Error" );
+                Main.infoBox ( "Wystąpił błąd, prawdopodobnie została podana nieprawidłowa ścieżka do pliku" +
+                                       " lub został wybrany nieobsługiwany format pliku.\nDozwolone formaty to: .ai, .doc," +
+                                       " .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx," +
+                                       " .rtf.","Error" );
             }
         } );
     }

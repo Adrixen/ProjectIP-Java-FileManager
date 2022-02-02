@@ -99,7 +99,7 @@ public class Main
      *
      * 	@param password hasło do łogowania
      */
-    static void logowanie(char[] password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
+    void logowanie(char[] password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
     {
         URL url = new URL("https://gist.githubusercontent.com/Adrixen/95e1a2a6bfad61933d5de5b3190e4f32/raw/55e31b1b75e4d7a80622476e3a176eeadf407571");
         BufferedReader in = new BufferedReader( new InputStreamReader(url.openStream()));
@@ -116,16 +116,20 @@ public class Main
                 if(idPracownika.startsWith("pr"))
                 {
                     permission=1;
+                    passwordField.setText("");
                     framePracownik.setVisible(true);
                 }
                 else if(idPracownika.startsWith("ki"))
                 {
                     permission=2;
+                    passwordField.setText("");
                     frameKierownik.setVisible(true);
                 }
                 else if(idPracownika.startsWith("ka"))
                 {
                     permission=3;
+                    passwordField.setText("");
+                    Kadry.refreshKadry=true;
                     frameKadry.setVisible(true);
                 }
                 System.out.println ( "Twoj poziom uprawnien to: " + permission );
@@ -397,7 +401,7 @@ public class Main
     /**
      *  Metoda główna, która uruchamia się program.
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, DbxException, IOException
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, DbxException, IOException, InterruptedException
     {
         displayGUIComponents();
         setUpServerConnection();
