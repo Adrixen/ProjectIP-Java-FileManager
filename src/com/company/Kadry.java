@@ -18,15 +18,14 @@ class Kadry
     private JTextField textField1;
     private JButton wyslijPlikDoZatwierdzeniaButton;
     private JButton    odswiezListePlikowButton;
-    private JTextArea textArea1;
     private JButton    pobierzWybranyPlikButton;
-    private JTextField nazwaPlikuDoPobraniaTextField;
     private JButton usunPlikButton;
     private JButton cofnijPlikDoPoprawyButton;
     private JButton odswiezListeFolderArchiwumButton;
     private JButton cofnijPlikDoKierownikaButton;
     private JButton wyswietlDokumentButton;
     private JButton wylogujButton;
+    private JList<String> list1;
 
     public Kadry( )
     {
@@ -46,8 +45,8 @@ class Kadry
             {
                 try
                 {
-                    String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/archiwum/" + tempNazwaPliku );
+                    String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
+                    Main.moveFile ( list1.getSelectedValue(),"/archiwum/" + tempNazwaPliku );
                     Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
                 }
                 catch ( DbxException dbxException )
@@ -64,7 +63,14 @@ class Kadry
             try
             {
                 Main.listFiles ( "/kadry/" );
-                textArea1.setText(Main.listaPlikowP);
+                DefaultListModel<String> list  = new DefaultListModel<> ();
+                String[] items = Main.listaPlikowP.split("\n");
+
+                for(String item : items)
+                {
+                    list.addElement(item);
+                }
+                list1.setModel(list);
             }
             catch ( DbxException dbxException )
             {
@@ -73,13 +79,13 @@ class Kadry
         } );
         pobierzWybranyPlikButton.addActionListener ( e -> {
             Main.saveFile ();
-            String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-            Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+            String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
+            Main.downloadFile ( list1.getSelectedValue(), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
         } );
         usunPlikButton.addActionListener ( e -> {
             try
             {
-                Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
+                Main.deleteFile (list1.getSelectedValue());
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
@@ -89,8 +95,8 @@ class Kadry
         cofnijPlikDoPoprawyButton.addActionListener ( e -> {
             try
             {
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/pracownik/" + tempNazwaPliku );
+                String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
+                Main.moveFile ( list1.getSelectedValue(),"/pracownik/" + tempNazwaPliku );
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
             }
             catch ( DbxException dbxException )
@@ -101,8 +107,8 @@ class Kadry
         cofnijPlikDoKierownikaButton.addActionListener ( e -> {
             try
             {
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-                Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
+                String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
+                Main.moveFile ( list1.getSelectedValue(),"/kierownik/" + tempNazwaPliku );
                 Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
             }
             catch ( DbxException dbxException )
@@ -114,7 +120,14 @@ class Kadry
             try
             {
                 Main.listFiles ( "/archiwum/" );
-                textArea1.setText(Main.listaPlikowP);
+                DefaultListModel<String> list  = new DefaultListModel<> ();
+                String[] items = Main.listaPlikowP.split("\n");
+
+                for(String item : items)
+                {
+                    list.addElement(item);
+                }
+                list1.setModel(list);
             }
             catch ( DbxException dbxException )
             {
@@ -130,7 +143,7 @@ class Kadry
             try
             {
                 DocumentPreview.numerStrony=0;
-                Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+                Main.generateFilePreview (list1.getSelectedValue());
                 DocumentPreview.displayDocument();
             }
             catch ( DbxException | IllegalArgumentException dbxException )

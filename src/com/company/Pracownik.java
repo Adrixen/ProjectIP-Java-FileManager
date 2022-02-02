@@ -19,12 +19,11 @@ class Pracownik
     private JTextField textField1;
     private JButton wyslijPlikDoZatwierdzeniaButton;
     private JButton    odswiezListePlikowButton;
-    private JTextArea textArea1;
     private JButton    pobierzWybranyPlikButton;
-    private JTextField nazwaPlikuDoPobraniaTextField;
     private JButton usunPlikButton;
     private JButton wyswietlDokumentButton;
-    private JButton wylogujButton;
+    private JButton       wylogujButton;
+    private JList<String> list1;
 
     public Pracownik( )
     {
@@ -42,10 +41,10 @@ class Pracownik
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
-                String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
+                String tempNazwaPliku = list1.getSelectedValue().substring( list1.getSelectedValue().lastIndexOf( "/") + 1).trim();
                 try
                 {
-                    Main.moveFile ( nazwaPlikuDoPobraniaTextField.getText ( ),"/kierownik/" + tempNazwaPliku );
+                    Main.moveFile ( list1.getSelectedValue() , "/kierownik/" + tempNazwaPliku );
                 }
                 catch ( DbxException dbxException )
                 {
@@ -62,7 +61,14 @@ class Pracownik
             try
             {
                 Main.listFilesForPracownik ();
-                textArea1.setText(Main.listaPlikowP);
+                DefaultListModel<String> list  = new DefaultListModel<> ();
+                String[] items = Main.listaPlikowP.split("\n");
+
+                for(String item : items)
+                {
+                    list.addElement(item);
+                }
+                list1.setModel(list);
             }
             catch ( DbxException dbxException )
             {
@@ -71,13 +77,13 @@ class Pracownik
         } );
         pobierzWybranyPlikButton.addActionListener ( e -> {
             Main.saveFile ();
-            String tempNazwaPliku = nazwaPlikuDoPobraniaTextField.getText ( ).substring(nazwaPlikuDoPobraniaTextField.getText ( ).lastIndexOf("/") + 1).trim();
-            Main.downloadFile ( nazwaPlikuDoPobraniaTextField.getText ( ), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+            String tempNazwaPliku = list1.getSelectedValue().substring( list1.getSelectedValue().lastIndexOf( "/") + 1).trim();
+            Main.downloadFile ( list1.getSelectedValue() , new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
         } );
         usunPlikButton.addActionListener ( e -> {
             try
             {
-                Main.deleteFile (nazwaPlikuDoPobraniaTextField.getText ( ));
+                Main.deleteFile ( list1.getSelectedValue() );
             }
             catch ( DbxException | IllegalArgumentException dbxException )
             {
@@ -88,7 +94,7 @@ class Pracownik
             try
             {
                 DocumentPreview.numerStrony=0;
-                Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+                Main.generateFilePreview ( list1.getSelectedValue() );
                 DocumentPreview.displayDocument();
             }
             catch ( DbxException | IllegalArgumentException dbxException )
