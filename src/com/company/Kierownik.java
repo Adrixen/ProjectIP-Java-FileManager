@@ -1,6 +1,7 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
+
 import javax.swing.*;
 import java.io.File;
 
@@ -23,6 +24,8 @@ class Kierownik
     private JTextField nazwaPlikuDoPobraniaTextField;
     private JButton usunPlikButton;
     private JButton cofnijPlikDoPoprawyButton;
+    private JButton wyswietlDokumentButton;
+    private JButton wylogujButton;
 
     public Kierownik( )
     {
@@ -89,6 +92,22 @@ class Kierownik
             {
                 dbxException.printStackTrace ( );
             }
+        } );
+        wylogujButton.addActionListener ( e -> {
+            Main.frameKierownik.setVisible ( false );
+            Main.zalogowanyPomyslnie=0;
+            Main.frameLogowanie.setVisible ( true );
+        } );
+        wyswietlDokumentButton.addActionListener ( e -> {
+            try
+            {
+                Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+            DocumentPreview.displayDocument();
         } );
     }
 

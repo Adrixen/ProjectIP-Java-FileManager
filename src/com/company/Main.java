@@ -35,10 +35,10 @@ public class Main
     static int permission=0;
 
     private JPanel panelMain;
-    static private JFrame frameLogowanie;
-    static private JFrame framePracownik;
-    static private JFrame frameKierownik;
-    static private JFrame frameKadry;
+    static JFrame frameLogowanie;
+    static JFrame framePracownik;
+    static JFrame frameKierownik;
+    static JFrame frameKadry;
 
     private JButton zalogujSieButton;
     private JButton zarejestrujSieButton;

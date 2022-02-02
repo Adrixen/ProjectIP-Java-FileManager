@@ -1,11 +1,9 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
+import javax.swing.*;
+import java.io.File;
 
 
 /**
@@ -26,6 +24,7 @@ class Pracownik
     private JTextField nazwaPlikuDoPobraniaTextField;
     private JButton usunPlikButton;
     private JButton wyswietlDokumentButton;
+    private JButton wylogujButton;
 
     public Pracownik( )
     {
@@ -85,22 +84,21 @@ class Pracownik
                 Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
             }
         } );
-        wyswietlDokumentButton.addActionListener ( new ActionListener ( )
-        {
-            @Override
-            public
-            void actionPerformed ( ActionEvent e )
+        wyswietlDokumentButton.addActionListener ( e -> {
+            try
             {
-                try
-                {
-                    Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
-                    DocumentPreview.displayDocument();
-                }
-                catch ( DbxException dbxException )
-                {
-                    dbxException.printStackTrace ( );
-                }
+                Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+                DocumentPreview.displayDocument();
             }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+        } );
+        wylogujButton.addActionListener ( e -> {
+            Main.framePracownik.setVisible ( false );
+            Main.zalogowanyPomyslnie=0;
+            Main.frameLogowanie.setVisible ( true );
         } );
     }
 

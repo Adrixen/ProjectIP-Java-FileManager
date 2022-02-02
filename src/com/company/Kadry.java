@@ -1,6 +1,7 @@
 package com.company;
 
 import com.dropbox.core.DbxException;
+
 import javax.swing.*;
 import java.io.File;
 
@@ -24,6 +25,8 @@ class Kadry
     private JButton cofnijPlikDoPoprawyButton;
     private JButton odswiezListeFolderArchiwumButton;
     private JButton cofnijPlikDoKierownikaButton;
+    private JButton wyswietlDokumentButton;
+    private JButton wylogujButton;
 
     public Kadry( )
     {
@@ -117,6 +120,22 @@ class Kadry
             {
                 dbxException.printStackTrace ( );
             }
+        } );
+        wylogujButton.addActionListener ( e -> {
+            Main.frameKadry.setVisible ( false );
+            Main.zalogowanyPomyslnie=0;
+            Main.frameLogowanie.setVisible ( true );
+        } );
+        wyswietlDokumentButton.addActionListener ( e -> {
+            try
+            {
+                Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+            }
+            catch ( DbxException dbxException )
+            {
+                dbxException.printStackTrace ( );
+            }
+            DocumentPreview.displayDocument();
         } );
     }
 
