@@ -8,11 +8,15 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
 public class DocumentPreview
 {
+    static int numerStrony = 0;
+    static int rzeczywistaIloscStron;
     static JFrame frameDocument = new JFrame();
     private static
     JPanel getTestPanel ( )
@@ -40,11 +44,10 @@ public class DocumentPreview
                 {
                     g.setColor ( Color.black );
                     g.fillRect ( 0 , 0 , getWidth ( ) , getHeight ( ) );
-                    PDPage      page    = doc.getPage ( 0 );
+                    PDPage      page    = doc.getPage ( numerStrony );
                     PDRectangle cropBox = page.getCropBox ( );
                     boolean     rot     = page.getRotation ( ) == 90 || page.getRotation ( ) == 270;
 
-                    // https://stackoverflow.com/questions/1106339/resize-image-to-fit-in-bounding-box
                     float imgWidth  = rot ? cropBox.getHeight ( ) : cropBox.getWidth ( );
                     float imgHeight = rot ? cropBox.getWidth ( ) : cropBox.getHeight ( );
                     float xf        = getWidth ( ) / imgWidth;
@@ -58,7 +61,8 @@ public class DocumentPreview
                     {
                         g.translate ( 0 , (int) ( ( getHeight ( ) - imgHeight * xf ) / 2 ) );
                     }
-                    renderer.renderPageToGraphics ( 0 , (Graphics2D) g , scale );
+                    rzeczywistaIloscStron = doc.getNumberOfPages ();
+                    renderer.renderPageToGraphics ( numerStrony , (Graphics2D) g , scale );
                 }
                 catch ( IOException e )
                 {
@@ -67,6 +71,73 @@ public class DocumentPreview
             }
         };
     }
+
+
+    static void nastepnaStrona()
+    {
+        try
+        {
+            if ( numerStrony < rzeczywistaIloscStron-1 )
+            {
+                frameDocument.dispose ();
+                numerStrony++;
+                DocumentPreview.displayDocument ( );
+            }
+        }
+        catch( IndexOutOfBoundsException ex)
+        {
+            frameDocument.dispose ();
+        }
+    }
+
+    static void poprzedniaStrona()
+    {
+        try
+        {
+            if ( numerStrony > 0 )
+            {
+                frameDocument.dispose ();
+                numerStrony--;
+                DocumentPreview.displayDocument ( );
+            }
+        }
+        catch( IndexOutOfBoundsException ex)
+        {
+            frameDocument.dispose ();
+        }
+    }
+    static void arrowKeysListener()
+    {
+        frameDocument.addKeyListener ( new KeyListener ( )
+        {
+            @Override
+            public
+            void keyTyped ( KeyEvent e )
+            {
+            }
+
+            @Override
+            public
+            void keyPressed ( KeyEvent e )
+            {
+            }
+
+            @Override
+            public
+            void keyReleased ( KeyEvent e )
+            {
+                if(e.getKeyCode() == KeyEvent.VK_LEFT)
+                {
+                    poprzedniaStrona();
+                }
+                else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
+                {
+                    nastepnaStrona ();
+                }
+            }
+        });
+    }
+
     static void displayDocument()
     {
         frameDocument.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

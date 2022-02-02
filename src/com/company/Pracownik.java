@@ -87,12 +87,13 @@ class Pracownik
         wyswietlDokumentButton.addActionListener ( e -> {
             try
             {
+                DocumentPreview.numerStrony=0;
                 Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
                 DocumentPreview.displayDocument();
             }
-            catch ( DbxException dbxException )
+            catch ( DbxException | IllegalArgumentException dbxException )
             {
-                dbxException.printStackTrace ( );
+                Main.infoBox ( "Wystąpił błąd, prawdopodobnie została podana nieprawidłowa ścieżka do pliku lub został wybrany nieobsługiwany format pliku.\nDozwolone formaty to: .ai, .doc, .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx, .rtf.","Error" );
             }
         } );
         wylogujButton.addActionListener ( e -> {

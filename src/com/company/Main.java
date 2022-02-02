@@ -401,6 +401,6 @@ public class Main
     {
         displayGUIComponents();
         setUpServerConnection();
-
+        DocumentPreview.arrowKeysListener();
     }
 }
