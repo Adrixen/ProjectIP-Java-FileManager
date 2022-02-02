@@ -71,19 +71,6 @@
           <text value="Pobierz wybrany plik"/>
         </properties>
       </component>
-      <vspacer id="be3da">
-        <constraints>
-          <grid row="4" column="1" row-span="11" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
-      <component id="bb7a6" class="javax.swing.JButton" binding="odswiezListePlikowButton" default-binding="true">
-        <constraints>
-          <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Odśwież listę plików"/>
-        </properties>
-      </component>
       <component id="c43a3" class="javax.swing.JButton" binding="usunPlikButton">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -108,6 +95,27 @@
           </component>
         </children>
       </scrollpane>
+      <component id="bb7a6" class="javax.swing.JButton" binding="odswiezListePlikowButton" default-binding="true">
+        <constraints>
+          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Odśwież listę plików"/>
+        </properties>
+      </component>
+      <component id="d566a" class="javax.swing.JButton" binding="wyswietlDokumentButton">
+        <constraints>
+          <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Wyświetl dokument"/>
+        </properties>
+      </component>
+      <vspacer id="fa38b">
+        <constraints>
+          <grid row="4" column="1" row-span="10" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
     </children>
   </grid>
 </form>

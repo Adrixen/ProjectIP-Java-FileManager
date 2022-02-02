@@ -2,6 +2,8 @@ package com.company;
 
 import com.dropbox.core.DbxException;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 
@@ -22,7 +24,8 @@ class Pracownik
     private JTextArea textArea1;
     private JButton    pobierzWybranyPlikButton;
     private JTextField nazwaPlikuDoPobraniaTextField;
-    private JButton    usunPlikButton;
+    private JButton usunPlikButton;
+    private JButton wyswietlDokumentButton;
 
     public Pracownik( )
     {
@@ -80,6 +83,23 @@ class Pracownik
             catch ( DbxException | IllegalArgumentException dbxException )
             {
                 Main.infoBox ( "Usuwanie nie powiodło się! Czy nazwa pliku jest poprawna?", "Error" );
+            }
+        } );
+        wyswietlDokumentButton.addActionListener ( new ActionListener ( )
+        {
+            @Override
+            public
+            void actionPerformed ( ActionEvent e )
+            {
+                try
+                {
+                    Main.generateFilePreview ( nazwaPlikuDoPobraniaTextField.getText (  ) );
+                    DocumentPreview.displayDocument();
+                }
+                catch ( DbxException dbxException )
+                {
+                    dbxException.printStackTrace ( );
+                }
             }
         } );
     }

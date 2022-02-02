@@ -1,23 +1,26 @@
 package com.company;
 
+import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.awt.datatransfer.StringSelection;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
+
 
 /**
  * Klasa główna programu
@@ -374,12 +377,27 @@ public class Main
         client.files().moveV2(sourcePath, destinationPath);
     }
 
+    static void generateFilePreview(String sourcePath) throws DbxException
+    {
+        DbxDownloader<FileMetadata> test = client.files().getPreview ( sourcePath);
+        try (InputStream in = test.getInputStream(); OutputStream out = Files.newOutputStream(Paths.get("output.pdf")))
+        {
+            long length = in.transferTo(out);
+            System.out.println("Bytes transferred: " + length);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+
     /**
      *  Metoda główna, która uruchamia się program.
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, DbxException, IOException
     {
         displayGUIComponents();
         setUpServerConnection();
+
     }
 }
