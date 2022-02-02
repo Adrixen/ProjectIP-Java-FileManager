@@ -72,17 +72,20 @@ public class Main
                 tempHash=PasswordHash.createHash ( passwordField.getPassword ( ));
                 if(passwordField.getPassword().length==0)
                 {
-                    infoBox ( "1. Hasło nie może być puste \n" +
-                                          "2. Hasło musi na końcu zawierać identyfikator podany przez administratora poprzedzony podłogą"
-                            ,"Rejestracja w toku..");
+                    infoBox ( """
+                                      1. Hasło nie może być puste.\s
+                                      2. Hasło musi na końcu zawierać identyfikator podany przez administratora poprzedzony podłogą.
+                                      3. Przykład poprawnego hasła: password_pr98X"""
+                            , "Rejestracja w toku..");
                 }
                 else
                 {
                     StringSelection selection = new StringSelection(tempHash);
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(selection, selection);
-                    infoBox ( "Hash twojego hasła to:\n" + tempHash + "\nZostał on skopiowany do schowka, podaj go administratorowi",
-                              "Rejestracja w toku.." );
+                    infoBox ( "Hash twojego hasła to:\n" + tempHash + "\nZostał on skopiowany do schowka, podaj go administratorowi." +
+                            "\nPamiętaj aby pod żadnym pozorem nie podawać nikomu twojego ORYGINALNEGO hasła."
+                            , "Rejestracja w toku.." );
                 }
             }
             catch ( NoSuchAlgorithmException | InvalidKeySpecException noSuchAlgorithmException )
