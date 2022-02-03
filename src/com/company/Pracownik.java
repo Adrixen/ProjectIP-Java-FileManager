@@ -85,7 +85,7 @@ class Pracownik
             }
         } );
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
-            if ( ! textField1.getText ( ).isEmpty ( ) )
+            if ( list1.getSelectedValue ()!=null )
             {
                 String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
                 try
@@ -104,15 +104,22 @@ class Pracownik
             }
             else
             {
-                Main.infoBox ( "Podaj nazwe pliku!" , "Error" );
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
             }
         } );
 
         pobierzWybranyPlikButton.addActionListener ( e -> {
-            Main.saveFile ( );
-            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
-            Main.downloadFile ( list1.getSelectedValue ( ) , new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
-            list1.clearSelection ();
+            if(list1.getSelectedValue ()==null)
+            {
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                Main.saveFile ( );
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                Main.downloadFile ( list1.getSelectedValue ( ) , new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+                list1.clearSelection ( );
+            }
         } );
         usunPlikButton.addActionListener ( e -> {
             try
@@ -148,11 +155,18 @@ class Pracownik
             list1.clearSelection ();
         } );
         odczytajNotatkePlikuButton.addActionListener ( e -> {
-            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
-            String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
-            Main.readNote ("/notatki/"+"notatka"+temp+".txt");
-            notatkaTextArea.setText ( Main.note );
-            list1.clearSelection ();
+            if(list1.getSelectedValue ()==null)
+            {
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                String temp           = tempNazwaPliku.substring ( 0 , tempNazwaPliku.lastIndexOf ( '.' ) );
+                Main.readNote ( "/notatki/" + "notatka" + temp + ".txt" );
+                notatkaTextArea.setText ( Main.note );
+                list1.clearSelection ( );
+            }
         } );
     }
 

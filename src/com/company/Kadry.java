@@ -104,7 +104,7 @@ class Kadry
             }
         } );
         wyslijPlikDoZatwierdzeniaButton.addActionListener ( e -> {
-            if(!textField1.getText().isEmpty ())
+            if(list1.getSelectedValue ()!=null)
             {
                 try
                 {
@@ -135,10 +135,17 @@ class Kadry
             }
         } );
         pobierzWybranyPlikButton.addActionListener ( e -> {
-            Main.saveFile ();
-            String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
-            Main.downloadFile ( list1.getSelectedValue(), new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
-            list1.clearSelection ();
+            if(list1.getSelectedValue ()==null)
+            {
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                Main.saveFile ( );
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                Main.downloadFile ( list1.getSelectedValue ( ) , new File ( Main.pathFolderu + "/" + tempNazwaPliku ) );
+                list1.clearSelection ( );
+            }
         } );
         usunPlikButton.addActionListener ( e -> {
             try
@@ -152,35 +159,51 @@ class Kadry
             }
         } );
         cofnijPlikDoPoprawyButton.addActionListener ( e -> {
-            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
-            try
-            {   Main.note = "Data: "+LocalDateTime.now().withNano(0).withSecond ( 0 )+"\nTyp: Przesłany do poprawy\n"+"Wiadomość od "+Main.idPracownika+":\n"+notatkaTextArea.getText()+"\n";
-                Main.moveFile ( list1.getSelectedValue ( ) , "/pracownik/" + tempNazwaPliku );
-                String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
-                Main.generateNote ( "/notatki/"+"notatka"+temp+".txt" );
-                list1.clearSelection ();
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
-            }
-            catch ( DbxException | IOException dbxException )
+            if(list1.getSelectedValue ()==null)
             {
-                System.out.println ( dbxException );
-                Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                try
+                {
+                    Main.note = "Data: " + LocalDateTime.now ( ).withNano ( 0 ).withSecond ( 0 ) + "\nTyp: Przesłany do poprawy\n" + "Wiadomość od " + Main.idPracownika + ":\n" + notatkaTextArea.getText ( ) + "\n";
+                    Main.moveFile ( list1.getSelectedValue ( ) , "/pracownik/" + tempNazwaPliku );
+                    String temp = tempNazwaPliku.substring ( 0 , tempNazwaPliku.lastIndexOf ( '.' ) );
+                    Main.generateNote ( "/notatki/" + "notatka" + temp + ".txt" );
+                    list1.clearSelection ( );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
+                }
+                catch ( DbxException | IOException dbxException )
+                {
+                    System.out.println ( dbxException );
+                    Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
+                }
             }
         } );
         cofnijPlikDoKierownikaButton.addActionListener ( e -> {
-            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
-            try
-            {   Main.note = "Data: "+ LocalDateTime.now().withNano( 0).withSecond ( 0 )+"\nTyp: Przesłany do poprawy\n"+"Wiadomość od "+Main.idPracownika+":\n"+notatkaTextArea.getText()+"\n";
-                Main.moveFile ( list1.getSelectedValue ( ) , "/kierownik/" + tempNazwaPliku );
-                String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
-                Main.generateNote ( "/notatki/"+"notatka"+temp+".txt" );
-                list1.clearSelection ();
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
-            }
-            catch ( DbxException | IOException dbxException )
+            if(list1.getSelectedValue ()==null)
             {
-                System.out.println ( dbxException );
-                Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                try
+                {
+                    Main.note = "Data: " + LocalDateTime.now ( ).withNano ( 0 ).withSecond ( 0 ) + "\nTyp: Przesłany do poprawy\n" + "Wiadomość od " + Main.idPracownika + ":\n" + notatkaTextArea.getText ( ) + "\n";
+                    Main.moveFile ( list1.getSelectedValue ( ) , "/kierownik/" + tempNazwaPliku );
+                    String temp = tempNazwaPliku.substring ( 0 , tempNazwaPliku.lastIndexOf ( '.' ) );
+                    Main.generateNote ( "/notatki/" + "notatka" + temp + ".txt" );
+                    list1.clearSelection ( );
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
+                }
+                catch ( DbxException | IOException dbxException )
+                {
+                    System.out.println ( dbxException );
+                    Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
+                }
             }
         } );
         odswiezListeFolderArchiwumButton.addActionListener ( e -> {
@@ -217,11 +240,18 @@ class Kadry
             }
         } );
         odczytajNotatkePlikuButton.addActionListener ( e -> {
-            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
-            String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
-            Main.readNote ("/notatki/"+"notatka"+temp+".txt");
-            notatkaTextArea.setText ( Main.note );
-            list1.clearSelection ();
+            if(list1.getSelectedValue ()==null)
+            {
+                Main.infoBox ( "Brak wybranego pliku!" , "Error" );
+            }
+            else
+            {
+                String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+                String temp           = tempNazwaPliku.substring ( 0 , tempNazwaPliku.lastIndexOf ( '.' ) );
+                Main.readNote ( "/notatki/" + "notatka" + temp + ".txt" );
+                notatkaTextArea.setText ( Main.note );
+                list1.clearSelection ( );
+            }
         } );
     }
 

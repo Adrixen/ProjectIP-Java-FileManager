@@ -226,7 +226,7 @@ public class Main
         }
         catch ( IOException | DbxException e )
         {
-            e.printStackTrace ( );
+            Main.infoBox ( "Brak wybranego pliku!" , "Error" );
         }
     }
 
@@ -410,7 +410,7 @@ public class Main
         }
         catch ( IOException | DbxException e )
         {
-            System.out.println("Nie ma jeszcze notatki do tego pliku");
+            Main.infoBox ( "Nie ma jeszcze notatki do tego pliku!" , "Error" );
         }
         File file = new File("notatka.txt");
         try (InputStream in = new FileInputStream(file))
@@ -445,7 +445,7 @@ public class Main
         }
         catch ( IOException | DbxException e )
         {
-            e.printStackTrace ( );
+            Main.infoBox ( "Odczytywanie nie powiodło się! Nazwa pliku jest niepoprawna albo plik nie zawiera notatki!" , "Error" );
         }
         File file = new File("notatka.txt");
         try (InputStream in = new FileInputStream(file))
