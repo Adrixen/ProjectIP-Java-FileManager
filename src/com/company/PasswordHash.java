@@ -7,6 +7,9 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+/**
+ * Klasa służąca do hashowania i walidowania haseł
+ */
 
 public class PasswordHash
 {

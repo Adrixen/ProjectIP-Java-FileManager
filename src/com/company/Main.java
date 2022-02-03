@@ -389,6 +389,11 @@ public class Main
         client.files().moveV2(sourcePath, destinationPath);
     }
 
+    /**
+     *  Metoda pozwalająca wyswietlic dokument
+     * @param sourcePath sciezka na serverze zawierająca dokument ktory chcemy wyswietlic
+     */
+
     static void generateFilePreview(String sourcePath) throws DbxException
     {
         DbxDownloader<FileMetadata> test = client.files().getPreview ( sourcePath);
@@ -401,7 +406,10 @@ public class Main
             ex.printStackTrace();
         }
     }
-
+    /**
+     *  Metoda pozwalająca wygenerować notatkę do pliku
+     * @param noteDestination sciezka na serverze do przechowywania notatki
+     */
     static void generateNote(String noteDestination) throws IOException, DbxException
     {
         try (OutputStream downloadFile = new FileOutputStream ( "notatka.txt" ))
@@ -437,6 +445,10 @@ public class Main
         }
     }
 
+    /**
+     *  Metoda pozwalająca odczytać notatkę dodaną do pliku przy jego transferze
+     * @param noteDestination sciezka na serverze do przechowywania notatki
+     */
     static void readNote(String noteDestination)
     {
         try (OutputStream downloadFile = new FileOutputStream ( "notatka.txt" ))

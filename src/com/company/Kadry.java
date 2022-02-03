@@ -31,6 +31,7 @@ class Kadry
     private JTextArea notatkaTextArea;
     private JButton   odczytajNotatkePlikuButton;
     static boolean    refreshKadry=true;
+
     void refresherPlikowKadry() throws DbxException
     {
         Main.listFiles ( "/kadry/" );
@@ -254,7 +255,9 @@ class Kadry
             }
         } );
     }
-
+    /**
+     * metoda zwracająca panel kadr
+     */
     public JPanel getPanel() {
         return panelKadry;
     }

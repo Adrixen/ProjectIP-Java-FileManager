@@ -13,6 +13,10 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Klasa służąca do wyświetlania dokumentu w GUI
+ */
+
 public class DocumentPreview
 {
     static int numerStrony = 0;
@@ -72,7 +76,9 @@ public class DocumentPreview
         };
     }
 
-
+    /**
+     * metoda zmieniająca stronę wyswietlonego dokumentu o jedną dalej
+     */
     static void nastepnaStrona()
     {
         try
@@ -90,6 +96,10 @@ public class DocumentPreview
         }
     }
 
+    /**
+     * metoda zmieniająca stronę wyswietlonego dokumentu o jedną wstecz
+     */
+
     static void poprzedniaStrona()
     {
         try
@@ -106,6 +116,11 @@ public class DocumentPreview
             frameDocument.dispose ();
         }
     }
+
+    /**
+     * metoda pozwalająca zmieniać strony wyświetlanego dokumentu za pomocą strzałek
+     */
+
     static void arrowKeysListener()
     {
         frameDocument.addKeyListener ( new KeyListener ( )
@@ -137,6 +152,10 @@ public class DocumentPreview
             }
         });
     }
+
+    /**
+     * metoda wyświetlająca dokument
+     */
 
     static void displayDocument()
     {

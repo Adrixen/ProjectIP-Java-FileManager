@@ -192,7 +192,9 @@ class Kierownik
             }
         } );
     }
-
+    /**
+     * metoda zwracająca panel kierownika
+     */
     public JPanel getPanel() {
         return panelKierownik;
     }

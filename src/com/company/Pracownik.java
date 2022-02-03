@@ -28,6 +28,10 @@ class Pracownik
     private JTextArea     notatkaTextArea;
     private JButton   odczytajNotatkePlikuButton;
 
+    /**
+     *  Metoda pozwalająca odswiezyc liste plikow w Jlist
+     */
+
     void refresherPlikow ( ) throws DbxException
     {
         Main.listFilesForPracownik ( );
@@ -170,6 +174,9 @@ class Pracownik
         } );
     }
 
+    /**
+     * metoda zwracająca panel pracownika
+     */
     public
     JPanel getPanel ( )
     {
