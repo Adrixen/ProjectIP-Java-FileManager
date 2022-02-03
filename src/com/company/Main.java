@@ -410,7 +410,7 @@ public class Main
         }
         catch ( IOException | DbxException e )
         {
-            Main.infoBox ( "Nie ma jeszcze notatki do tego pliku!" , "Error" );
+            System.out.println ( "Nie ma jeszcze notatki do tego pliku.. Generowanie.." );
         }
         File file = new File("notatka.txt");
         try (InputStream in = new FileInputStream(file))
