@@ -7,6 +7,8 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.WriteMode;
+import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
@@ -51,6 +54,8 @@ public class Main
     static String tempFileExtension;
     static String idPracownika;
     static String tempHash;
+    static String note;
+    static String noteTemp;
     /*!
     Konstruktor programu.
     */
@@ -397,6 +402,61 @@ public class Main
         }
     }
 
+    static void generateNote(String noteDestination) throws IOException, DbxException
+    {
+        try (OutputStream downloadFile = new FileOutputStream ( "notatka.txt" ))
+        {
+            client.files ( ).downloadBuilder ( noteDestination ).download ( downloadFile ); //pobiera
+        }
+        catch ( IOException | DbxException e )
+        {
+            System.out.println("Nie ma jeszcze notatki do tego pliku");
+        }
+        File file = new File("notatka.txt");
+        try (InputStream in = new FileInputStream(file))
+        {
+            noteTemp = IOUtils.toString( in, StandardCharsets.UTF_8); //zawartosc do stringa
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try (PrintStream out = new PrintStream(new FileOutputStream("notatka.txt")))
+        {
+            out.print(noteTemp+note);
+        }
+        try
+        {
+            InputStream in = new FileInputStream ("notatka.txt");
+            client.files().uploadBuilder(noteDestination).withMode ( WriteMode.OVERWRITE ).uploadAndFinish( in);
+        }
+        catch ( IOException | DbxException e )
+        {
+            e.printStackTrace ( );
+        }
+    }
+
+    static void readNote(String noteDestination)
+    {
+        try (OutputStream downloadFile = new FileOutputStream ( "notatka.txt" ))
+        {
+            client.files ( ).downloadBuilder ( noteDestination ).download ( downloadFile ); //pobiera
+        }
+        catch ( IOException | DbxException e )
+        {
+            e.printStackTrace ( );
+        }
+        File file = new File("notatka.txt");
+        try (InputStream in = new FileInputStream(file))
+        {
+            note = IOUtils.toString( in, StandardCharsets.UTF_8); //zawartosc do stringa
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *  Metoda główna, która uruchamia się program.

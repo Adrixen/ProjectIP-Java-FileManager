@@ -4,6 +4,8 @@ import com.dropbox.core.DbxException;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 /**
@@ -18,12 +20,13 @@ class Pracownik
     private JButton       wyslijPlikButton;
     private JTextField    textField1;
     private JButton       wyslijPlikDoZatwierdzeniaButton;
-    private JButton       odswiezListePlikowButton;
     private JButton       pobierzWybranyPlikButton;
     private JButton       usunPlikButton;
     private JButton       wyswietlDokumentButton;
     private JButton       wylogujButton;
     private JList<String> list1;
+    private JTextArea     notatkaTextArea;
+    private JButton   odczytajNotatkePlikuButton;
 
     void refresherPlikow ( ) throws DbxException
     {
@@ -69,11 +72,12 @@ class Pracownik
                 };
         Thread threadPracownikRefresher = new Thread ( runnable );
         threadPracownikRefresher.start ( );
-        chooserButton.addActionListener ( e -> Main.chooseFile ( ) );
+        chooserButton.addActionListener ( e -> {Main.chooseFile ( );list1.clearSelection (); });
         wyslijPlikButton.addActionListener ( e -> {
             if ( ! textField1.getText ( ).isEmpty ( ) )
             {
                 Main.uploadFile ( Main.pathPliku , "/pracownik/" + Main.idPracownika + " - " + textField1.getText ( ) + "." + Main.tempFileExtension );
+                list1.clearSelection ();
             }
             else
             {
@@ -85,31 +89,25 @@ class Pracownik
             {
                 String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
                 try
-                {
+                {   Main.note = "Data: "+LocalDateTime.now().withNano(0).withSecond ( 0 )+"\nTyp: Przesłany do zatwierdzenia\n"+"Wiadomość od "+Main.idPracownika+":\n"+notatkaTextArea.getText()+"\n";
                     Main.moveFile ( list1.getSelectedValue ( ) , "/kierownik/" + tempNazwaPliku );
+                    String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
+                    Main.generateNote ( "/notatki/"+"notatka"+temp+".txt" );
                     list1.clearSelection ();
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
                 }
-                catch ( DbxException dbxException )
+                catch ( DbxException | IOException dbxException )
                 {
-                    dbxException.printStackTrace ( );
+                    System.out.println ( dbxException );
+                    Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
                 }
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
             }
             else
             {
                 Main.infoBox ( "Podaj nazwe pliku!" , "Error" );
             }
         } );
-        odswiezListePlikowButton.addActionListener ( e -> {
-            try
-            {
-                refresherPlikow ( );
-            }
-            catch ( DbxException dbxException )
-            {
-                dbxException.printStackTrace ( );
-            }
-        } );
+
         pobierzWybranyPlikButton.addActionListener ( e -> {
             Main.saveFile ( );
             String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
@@ -147,6 +145,13 @@ class Pracownik
             Main.framePracownik.setVisible ( false );
             Main.zalogowanyPomyslnie = 0;
             Main.frameLogowanie.setVisible ( true );
+            list1.clearSelection ();
+        } );
+        odczytajNotatkePlikuButton.addActionListener ( e -> {
+            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+            String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
+            Main.readNote ("/notatki/"+"notatka"+temp+".txt");
+            notatkaTextArea.setText ( Main.note );
             list1.clearSelection ();
         } );
     }

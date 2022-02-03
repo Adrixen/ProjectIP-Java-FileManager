@@ -4,6 +4,8 @@ import com.dropbox.core.DbxException;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  *  Klasa która jest GUI dla kadrów
@@ -26,7 +28,9 @@ class Kadry
     private JButton wyswietlDokumentButton;
     private JButton wylogujButton;
     private JList<String> list1;
-    static boolean refreshKadry=true;
+    private JTextArea notatkaTextArea;
+    private JButton   odczytajNotatkePlikuButton;
+    static boolean    refreshKadry=true;
     void refresherPlikowKadry() throws DbxException
     {
         Main.listFiles ( "/kadry/" );
@@ -87,11 +91,12 @@ class Kadry
                 };
         Thread threadKadryRefresher = new Thread ( runnable );
         threadKadryRefresher.start ( );
-        chooserButton.addActionListener ( e -> Main.chooseFile () );
+        chooserButton.addActionListener ( e -> {Main.chooseFile ( );list1.clearSelection (); });
         wyslijPlikButton.addActionListener ( e -> {
             if(!textField1.getText().isEmpty ())
             {
                 Main.uploadFile ( Main.pathPliku , "/kadry/kadry_" + textField1.getText ( ) + "." + Main.tempFileExtension );
+                list1.clearSelection ();
             }
             else
             {
@@ -105,12 +110,12 @@ class Kadry
                 {
                     String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
                     Main.moveFile ( list1.getSelectedValue(),"/archiwum/" + tempNazwaPliku );
-                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
                     list1.clearSelection ();
+                    Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
                 }
                 catch ( DbxException dbxException )
                 {
-                    dbxException.printStackTrace ( );
+                    Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
                 }
             }
             else
@@ -147,29 +152,35 @@ class Kadry
             }
         } );
         cofnijPlikDoPoprawyButton.addActionListener ( e -> {
+            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
             try
-            {
-                String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
-                Main.moveFile ( list1.getSelectedValue(),"/pracownik/" + tempNazwaPliku );
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            {   Main.note = "Data: "+LocalDateTime.now().withNano(0).withSecond ( 0 )+"\nTyp: Przesłany do poprawy\n"+"Wiadomość od "+Main.idPracownika+":\n"+notatkaTextArea.getText()+"\n";
+                Main.moveFile ( list1.getSelectedValue ( ) , "/pracownik/" + tempNazwaPliku );
+                String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
+                Main.generateNote ( "/notatki/"+"notatka"+temp+".txt" );
                 list1.clearSelection ();
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
             }
-            catch ( DbxException dbxException )
+            catch ( DbxException | IOException dbxException )
             {
-                dbxException.printStackTrace ( );
+                System.out.println ( dbxException );
+                Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
             }
         } );
         cofnijPlikDoKierownikaButton.addActionListener ( e -> {
+            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
             try
-            {
-                String tempNazwaPliku = list1.getSelectedValue().substring(list1.getSelectedValue().lastIndexOf("/") + 1).trim();
-                Main.moveFile ( list1.getSelectedValue(),"/kierownik/" + tempNazwaPliku );
-                Main.infoBox ( "Przenoszenie zakończone powodzeniem!", "Sukces!" );
+            {   Main.note = "Data: "+ LocalDateTime.now().withNano( 0).withSecond ( 0 )+"\nTyp: Przesłany do poprawy\n"+"Wiadomość od "+Main.idPracownika+":\n"+notatkaTextArea.getText()+"\n";
+                Main.moveFile ( list1.getSelectedValue ( ) , "/kierownik/" + tempNazwaPliku );
+                String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
+                Main.generateNote ( "/notatki/"+"notatka"+temp+".txt" );
                 list1.clearSelection ();
+                Main.infoBox ( "Przenoszenie zakończone powodzeniem!" , "Sukces!" );
             }
-            catch ( DbxException dbxException )
+            catch ( DbxException | IOException dbxException )
             {
-                dbxException.printStackTrace ( );
+                System.out.println ( dbxException );
+                Main.infoBox ( "Taka nazwa pliku już istnieje!" , "Error" );
             }
         } );
         odswiezListeFolderArchiwumButton.addActionListener ( e -> {
@@ -204,6 +215,13 @@ class Kadry
                                        " .docm, .docx, .eps, .gdoc, .gslides, .odp, .odt, .pps, .ppsm, .ppsx, .ppt, .pptm, .pptx," +
                                        " .rtf.","Error" );
             }
+        } );
+        odczytajNotatkePlikuButton.addActionListener ( e -> {
+            String tempNazwaPliku = list1.getSelectedValue ( ).substring ( list1.getSelectedValue ( ).lastIndexOf ( "/" ) + 1 ).trim ( );
+            String temp=tempNazwaPliku.substring(0, tempNazwaPliku.lastIndexOf('.'));
+            Main.readNote ("/notatki/"+"notatka"+temp+".txt");
+            notatkaTextArea.setText ( Main.note );
+            list1.clearSelection ();
         } );
     }
 

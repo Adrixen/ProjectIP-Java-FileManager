@@ -1,0 +1,30 @@
+Data: 2022-02-03T03:06
+Typ: Przesłany do zatwierdzenia
+Wiadomość od pr1:
+Notatka 1 od pr do ki
+Data: 2022-02-03T03:07
+Typ: Przesłany do poprawy
+Wiadomość od ki1:
+Popraw to od ki do pr
+
+Data: 2022-02-03T03:08
+Typ: Przesłany do zatwierdzenia
+Wiadomość od pr1:
+Ok zrobione od pr do ki
+
+Data: 2022-02-03T03:10
+Typ: Przesłany do zatwierdzenia
+Wiadomość od ki1:
+od ki do ka
+Data: 2022-02-03T03:13
+Typ: Przesłany do poprawy
+Wiadomość od ka1:
+Test1 od ka do pr
+Data: 2022-02-03T03:15
+Typ: Przesłany do zatwierdzenia
+Wiadomość od pr1:
+
+Data: 2022-02-03T03:15
+Typ: Przesłany do zatwierdzenia
+Wiadomość od ki1:
+

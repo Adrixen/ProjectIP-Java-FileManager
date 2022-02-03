@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.company.Kierownik">
-  <grid id="27dc6" binding="panelKierownik" layout-manager="GridLayoutManager" row-count="15" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panelKierownik" layout-manager="GridLayoutManager" row-count="16" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="20" width="600" height="450"/>
+      <xy x="20" y="20" width="850" height="700"/>
     </constraints>
     <properties>
-      <minimumSize width="600" height="450"/>
-      <preferredSize width="600" height="450"/>
+      <minimumSize width="850" height="700"/>
+      <preferredSize width="850" height="700"/>
     </properties>
     <border type="none"/>
     <children>
@@ -55,7 +55,7 @@
       </component>
       <component id="632c2" class="javax.swing.JButton" binding="pobierzWybranyPlikButton" default-binding="true">
         <constraints>
-          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Pobierz wybrany plik"/>
@@ -79,7 +79,7 @@
       </component>
       <scrollpane id="493af">
         <constraints>
-          <grid row="2" column="0" row-span="13" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="14" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -90,17 +90,9 @@
           </component>
         </children>
       </scrollpane>
-      <component id="bb7a6" class="javax.swing.JButton" binding="odswiezListePlikowButton" default-binding="true">
-        <constraints>
-          <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Odśwież listę plików"/>
-        </properties>
-      </component>
       <component id="e7bd8" class="javax.swing.JButton" binding="wyswietlDokumentButton">
         <constraints>
-          <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Wyświetl dokument"/>
@@ -108,17 +100,35 @@
       </component>
       <component id="e2ee2" class="javax.swing.JButton" binding="wylogujButton">
         <constraints>
-          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Wyloguj się"/>
         </properties>
       </component>
-      <vspacer id="b6cb0">
+      <scrollpane id="b04df">
         <constraints>
-          <grid row="5" column="1" row-span="6" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="1" row-span="7" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
-      </vspacer>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="47c13" class="javax.swing.JTextArea" binding="notatkaTextArea">
+            <constraints/>
+            <properties>
+              <text value="Notatka, z którą prześle się plik"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="4bc03" class="javax.swing.JButton" binding="odczytajNotatkePlikuButton">
+        <constraints>
+          <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Odczytaj notatkę pliku"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
